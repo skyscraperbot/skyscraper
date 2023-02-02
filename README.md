@@ -14,7 +14,7 @@ Find the file `app.properties` in the resources folder and change following vari
 Adding a Command
 ---
 
-Every bot command should be a part of the `com.motyldrogi.bot.command` package and implement the `CommandExecutor` class, implementing the `execute()` method at bare-minimum. The `execute()` method expectes two arguments:
+Every bot command should be a part of the `com.skyscraper.bot.command` package and implement the `CommandExecutor` class, implementing the `execute()` method at bare-minimum. The `execute()` method expectes two arguments:
 
 - **dMessage (DiscordMessage)**: The `DiscordMessage` object which contains the full information about the message
 - **commandSender (CommandSender)**: The class for sending messages and also for localization
@@ -29,12 +29,12 @@ The `execute()` method needs a `CommandInfo()` annotation to work, the `CommandI
 For example, the following command echos back the message received in an embeded message:
 
 ```java
-package com.motyldrogi.bot.command;
+package com.skyscraper.bot.command;
 
-import com.motyldrogi.bot.command.defaults.CommandExecutor;
-import com.motyldrogi.bot.command.defaults.CommandInfo;
-import com.motyldrogi.bot.command.defaults.CommandSender;
-import com.motyldrogi.bot.component.DiscordMessage;
+import com.skyscraper.bot.command.defaults.CommandExecutor;
+import com.skyscraper.bot.command.defaults.CommandInfo;
+import com.skyscraper.bot.command.defaults.CommandSender;
+import com.skyscraper.bot.component.DiscordMessage;
 import org.springframework.stereotype.Component;
 import java.awt.Color;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -80,5 +80,5 @@ this.commandRegistry.registerByExecutors(
 | **GET  /api/users/by-id/{id}**                     |                                | 200                    | 404                |
 | **GET  /api/users/by-name/{name}**                 |                                | 200                    | 404                |
 
-[travis-icon]: https://www.travis-ci.com/Motyldrogi/spring-discord-bot.svg?token=BAY6DRwNfoKsyPs22bzN&branch=main
-[travis]: https://www.travis-ci.com/github/Motyldrogi/spring-discord-bot/
+[travis-icon]: https://www.travis-ci.com/skyscraper/spring-discord-bot.svg?token=BAY6DRwNfoKsyPs22bzN&branch=main
+[travis]: https://www.travis-ci.com/github/skyscraper/spring-discord-bot/

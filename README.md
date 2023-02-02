@@ -80,5 +80,5 @@ this.commandRegistry.registerByExecutors(
 | **GET  /api/users/by-id/{id}**                     |                                | 200                    | 404                |
 | **GET  /api/users/by-name/{name}**                 |                                | 200                    | 404                |
 
-[travis-icon]: https://www.travis-ci.com/skyscraper/spring-discord-bot.svg?token=BAY6DRwNfoKsyPs22bzN&branch=main
-[travis]: https://www.travis-ci.com/github/skyscraper/spring-discord-bot/
+[travis-icon]: https://www.travis-ci.com/skyscraperbot/skyscraper.svg?token=BAY6DRwNfoKsyPs22bzN&branch=main
+[travis]: https://www.travis-ci.com/github/skyscraperbot/skyscraper/

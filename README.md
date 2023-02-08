@@ -1,84 +1,45 @@
-# Spring Boot Discord Bot
-Discord all-purpose bot, made using Spring Boot, JPA, Hibernate, REST, HikariCP, JDA.
+# Skyscraper Discord Weather Bot
+A super simple discord bot template made using [JDA][1] and the Gradle build tool.
 
-**TravisCI**<br>
-[![travis-icon]][travis]
 
-Requirements for connection
----
-Find the file `app.properties` in the resources folder and change following variables:
+## Where's the code?
+The code can be found in [`src/main/java/org/skyscraper`][2].
 
-- **prefix**: The prefix for all command
-- **discordToken**: Token from discord bot, https://discord.com/developers/applications
 
-Adding a Command
----
+## What do I need to provide?
+Nothing more than a discord bot token.
 
-Every bot command should be a part of the `com.skyscraper.bot.command` package and implement the `CommandExecutor` class, implementing the `execute()` method at bare-minimum. The `execute()` method expectes two arguments:
 
-- **dMessage (DiscordMessage)**: The `DiscordMessage` object which contains the full information about the message
-- **commandSender (CommandSender)**: The class for sending messages and also for localization
+## Building and Running
+- Clone the repository from Github.
+  ```bash
+  git clone https://github.com/skyscraperbot/skyscraper
+  ```
+- Enter the project's directory.
+  ```bash
+  cd skyscraper/
+  ```
+- Build the project.
+  ```bash
+  ./gradlew clean build
+  ```
+- Run the project, using your discord bot token.
+  ```bash
+  ./gradlew run --args "your discord bot token here"
+  ```
 
-The `execute()` method needs a `CommandInfo()` annotation to work, the `CommandInfo()` annotation can have the following arguments:
+_Having issues using `gradlew`? Read [this][3]._
 
-- **value**: The value that triggers the command, i.e. after the prefix
-- **minArguments**: Minimum arguments count for the command, defaults to 0
-- **maxArguments**: Maximum arguments count for the command, defaults to 0
-- **usage**: Text that gets displayed if the command was not used correctly
 
-For example, the following command echos back the message received in an embeded message:
+## What does this template do?
+This template does the following:
+- Displays a "ready for takeoff" message on the `ready` event.
+- Prints out a chatter's message every time they speak in a channel visible to the bot.
+- Prints out a chatter's message every time they Direct Message (DM) the bot.
 
-```java
-package com.skyscraper.bot.command;
+For more information on how to use JDA, [check out their github repository][1].
 
-import com.skyscraper.bot.command.defaults.CommandExecutor;
-import com.skyscraper.bot.command.defaults.CommandInfo;
-import com.skyscraper.bot.command.defaults.CommandSender;
-import com.skyscraper.bot.component.DiscordMessage;
-import org.springframework.stereotype.Component;
-import java.awt.Color;
-import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.MessageEmbed;
 
-@Component
-public class EchoCommand implements CommandExecutor {
-
-  @CommandInfo(value = "echo", minArguments = 1, maxArguments = 1, usage = "<message>")
-  @Override
-  public void execute(DiscordMessage dMessage, CommandSender commandSender) {
-
-    MessageEmbed messageEmbed = new EmbedBuilder()
-          .setColor(Color.decode("#ffffff"))
-          .setTitle(dMessage.getSentBy() + " said..")
-          .setDescription(dMessage.getData())
-          .build();
-
-    commandSender.sendEmbedMessage(messageEmbed);
-  }
-}
-```
-
-If you created a command, you have to register it:
-```java
-this.commandRegistry.registerByExecutors(
-    [...],
-    new EchoCommand()
-);
-```
-
-## Features
-- [x] Storing all user's data to mysql database
-- [x] Public rest api without oauth
-- [x] Github command, that shows infos about your github profile
-- [x] Say command, that talks in json
-
-## Endpoints
-
-| Method                                             | Optional query parameters      | Success status codes   | Error status codes |
-| -------------------------------------------------- | --------------------------     | ---------------------  | ------------------ |
-| **GET  /api/users**                                | page, size                     | 200                    |                    |
-| **GET  /api/users/by-id/{id}**                     |                                | 200                    | 404                |
-| **GET  /api/users/by-name/{name}**                 |                                | 200                    | 404                |
-
-[travis-icon]: https://www.travis-ci.com/skyscraperbot/skyscraper.svg?token=BAY6DRwNfoKsyPs22bzN&branch=main
-[travis]: https://www.travis-ci.com/github/skyscraperbot/skyscraper/
+[1]: https://github.com/DV8FromTheWorld/JDA "The JDA github Repository"
+[2]: https://github.com/skyscraperbot/skyscraper/tree/main/src/main/java/org/botexample "Template Source Code"
+[3]: https://gist.github.com/lucasstarsz/9bbc306f8655b916367d557043e498ad "Terminals Access Files Differently"

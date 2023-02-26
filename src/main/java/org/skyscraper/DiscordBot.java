@@ -28,7 +28,7 @@ public class DiscordBot {
         jdaBotBuilder.setActivity(Activity.playing("something"));
 
         // Set event listeners
-        jdaBotBuilder.addEventListeners(new MessageListener(), new ReadyListener());
+        jdaBotBuilder.addEventListeners(new MessageListener(), new ReadyListener(), new PingPong());
 
         try {
             // create the instance of JDA

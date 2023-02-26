@@ -10,6 +10,7 @@ public class MessageListener extends ListenerAdapter {
     public void onMessageReceived(MessageReceivedEvent event) {
         /* Private channels, I'm pretty sure, are DM messages.
          * Public channels are in discord servers. */
+    	
         if (event.isFromType(ChannelType.PRIVATE)) {
             System.out.printf("[PM] %s: %s\n",
                     event.getAuthor().getName(),

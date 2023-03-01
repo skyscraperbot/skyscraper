@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import okhttp3.OkHttpClient;
@@ -21,7 +22,7 @@ public class WeatherCommand extends ListenerAdapter {
     private final Gson gson = new Gson();
 
     public CommandData getCommandData() {
-        return new CommandData("weather", "Get the weather in a city");
+        return new CommandData("weather", "Get the weather in a city").addOption(OptionType.STRING,"city","The city you want weather for");
     }
 
     @Override

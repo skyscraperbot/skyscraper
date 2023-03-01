@@ -3,6 +3,7 @@ package org.skyscraper;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 import javax.security.auth.login.LoginException;
@@ -28,7 +29,7 @@ public class DiscordBot {
         jdaBotBuilder.setActivity(Activity.watching("the weather"));
 
         // Set event listeners
-        jdaBotBuilder.addEventListeners(new MessageListener(), new ReadyListener(), new PingPong());
+        jdaBotBuilder.addEventListeners(new MessageListener(), new ReadyListener(), new PingPong(), new WeatherCommand());
 
         try {
             // create the instance of JDA
@@ -36,6 +37,10 @@ public class DiscordBot {
 
             // optionally block until JDA is ready
             discordBot.awaitReady();
+
+            // Register the /weather command
+            CommandListUpdateAction commands = discordBot.updateCommands();
+            commands.addCommands(new WeatherCommand().getCommandData()).queue();
         } catch (LoginException | InterruptedException e) {
             System.err.println("Couldn't login.");
             e.printStackTrace();

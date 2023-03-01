@@ -25,7 +25,7 @@ public class DiscordBot {
         jdaBotBuilder.setBulkDeleteSplittingEnabled(false);
 
         // Set activity (like "playing Something")
-        jdaBotBuilder.setActivity(Activity.playing("something"));
+        jdaBotBuilder.setActivity(Activity.watching("the weather"));
 
         // Set event listeners
         jdaBotBuilder.addEventListeners(new MessageListener(), new ReadyListener(), new PingPong());

@@ -40,7 +40,7 @@ public class WeatherCommand extends ListenerAdapter {
 
             try {
                 Request request = new Request.Builder()
-                        .url("https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey)
+                        .url("https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial" + "&appid=" + apiKey)
                         .build();
 
                 Response response = httpClient.newCall(request).execute();

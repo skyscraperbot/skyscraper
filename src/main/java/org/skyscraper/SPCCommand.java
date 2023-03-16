@@ -14,8 +14,8 @@ public class SPCCommand extends ListenerAdapter {
 		
 		MessageEmbed newEmbed = new EmbedBuilder()
 				//Simple reference to their resource file
-				//.setImage("https://www.spc.noaa.gov/products/activity_loop.gif?" + Long.toString(Math.round(Math.random() * 100000))) //Append meaningless query to escape previously cached image
-				.setImage("https://www.spc.noaa.gov/products/activity_loop.gif")
+				.setImage("https://www.spc.noaa.gov/products/activity_loop.gif?" + Long.toString(Math.round(Math.random() * 100000))) //Append meaningless query to escape previously cached image
+				//.setImage("https://www.spc.noaa.gov/products/activity_loop.gif")
 				.build();
 		
 		event.replyEmbeds(newEmbed).queue();

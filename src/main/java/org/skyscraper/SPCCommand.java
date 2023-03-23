@@ -102,6 +102,20 @@ public class SPCCommand extends ListenerAdapter {
 					.build();
 			
 			rebuildMessage(event, event.editMessageEmbeds(newEmbed)).queue();
+		}else if (event.getComponentId().equals("day2otlk")) {
+			MessageEmbed newEmbed = new EmbedBuilder()
+					//Simple reference to their resource file
+					.setImage("https://www.spc.noaa.gov/products/outlook/day2otlk_1730.gif?" + Long.toString(Math.round(Math.random() * 100000))) //Append meaningless query to escape previously cached image
+					.build();
+			
+			rebuildMessage(event, event.editMessageEmbeds(newEmbed)).queue();
+		}else if (event.getComponentId().equals("day3otlk")) {
+			MessageEmbed newEmbed = new EmbedBuilder()
+					//Simple reference to their resource file
+					.setImage("https://www.spc.noaa.gov/products/outlook/day3otlk_0730.gif?" + Long.toString(Math.round(Math.random() * 100000))) //Append meaningless query to escape previously cached image
+					.build();
+			
+			rebuildMessage(event, event.editMessageEmbeds(newEmbed)).queue();
 		} else {
 			System.out.println("Testing!");
 			event.editComponents().setActionRow(

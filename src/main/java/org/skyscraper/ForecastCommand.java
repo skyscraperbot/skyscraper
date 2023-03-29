@@ -25,6 +25,35 @@ public class ForecastCommand extends ListenerAdapter {
         return new CommandData("forecast", "Get the forecast in a city").addOption(OptionType.STRING,"city","The city you want weather for");
     }
 
+    public String getDateFormat(String date){
+        String[] split = date.split("\\s");
+        String[] dateSplit = split[0].split("-");
+        String time;
+        switch(split[1]){
+            case "00:00:00": time = "12 am";
+                            break;
+            case "03:00:00": time = "3 am";
+                            break;
+            case "06:00:00": time = "6 am";
+                            break;
+            case "09:00:00": time = "9 am";
+                            break;
+            case "12:00:00": time = "12 pm";
+                            break;
+            case "15:00:00": time = "3 pm";
+                            break;
+            case "18:00:00": time = "6 pm";
+                            break;
+            case "21:00:00": time = "9 pm";
+                            break;
+            default: time = "fail";
+                            break;
+        }
+        return dateSplit[1] +"-"+ dateSplit[2] +", "+ time ;
+
+    }
+
+
     @Override
     public void onSlashCommand(SlashCommandEvent event) {
         if (!event.getName().equals("forecast")) {
@@ -50,15 +79,15 @@ public class ForecastCommand extends ListenerAdapter {
                      MessageEmbed embed = new EmbedBuilder()
                             .setColor(new Color(0x2F3136))
                             .setTitle("forecast " + city)
-                            .addField("forecast for tomorrow", "", true)
-                            .addField("3:00 am", data.getAsJsonArray("list").get(0).getAsJsonObject().get("main").getAsJsonObject().get("temp").getAsString() + "°F", true)
-                            .addField("6:00 am", data.getAsJsonArray("list").get(1).getAsJsonObject().get("main").getAsJsonObject().get("temp").getAsString() + "°F", true)
-                            .addField("9:00 am", data.getAsJsonArray("list").get(2).getAsJsonObject().get("main").getAsJsonObject().get("temp").getAsString() + "°F", true)
-                            .addField("12:00 am", data.getAsJsonArray("list").get(3).getAsJsonObject().get("main").getAsJsonObject().get("temp").getAsString() + "°F", true)
-                            .addField("3:00 pm", data.getAsJsonArray("list").get(4).getAsJsonObject().get("main").getAsJsonObject().get("temp").getAsString() + "°F", true)
-                            .addField("6:00 pm", data.getAsJsonArray("list").get(5).getAsJsonObject().get("main").getAsJsonObject().get("temp").getAsString() + "°F", true)
-                            .addField("9:00 pm", data.getAsJsonArray("list").get(6).getAsJsonObject().get("main").getAsJsonObject().get("temp").getAsString() + "°F", true)
-                            .addField("12:00 pm", data.getAsJsonArray("list").get(7).getAsJsonObject().get("main").getAsJsonObject().get("temp").getAsString() + "°F", true)
+                            .addField("24 hour forecast", "", true)
+                            .addField(getDateFormat(data.getAsJsonArray("list").get(0).getAsJsonObject().get("dt_txt").getAsString()), data.getAsJsonArray("list").get(0).getAsJsonObject().get("main").getAsJsonObject().get("temp").getAsString() + "°F" + " " + data.getAsJsonArray("list").get(0).getAsJsonObject().get("weather").getAsJsonArray().get(0).getAsJsonObject().get("description").getAsString(), true)
+                            .addField(getDateFormat(data.getAsJsonArray("list").get(1).getAsJsonObject().get("dt_txt").getAsString()), data.getAsJsonArray("list").get(1).getAsJsonObject().get("main").getAsJsonObject().get("temp").getAsString() + "°F" + " " + data.getAsJsonArray("list").get(1).getAsJsonObject().get("weather").getAsJsonArray().get(0).getAsJsonObject().get("description").getAsString(), true)
+                            .addField(getDateFormat(data.getAsJsonArray("list").get(2).getAsJsonObject().get("dt_txt").getAsString()), data.getAsJsonArray("list").get(2).getAsJsonObject().get("main").getAsJsonObject().get("temp").getAsString() + "°F" + " " + data.getAsJsonArray("list").get(2).getAsJsonObject().get("weather").getAsJsonArray().get(0).getAsJsonObject().get("description").getAsString(), true)
+                            .addField(getDateFormat(data.getAsJsonArray("list").get(3).getAsJsonObject().get("dt_txt").getAsString()), data.getAsJsonArray("list").get(3).getAsJsonObject().get("main").getAsJsonObject().get("temp").getAsString() + "°F" + " " + data.getAsJsonArray("list").get(3).getAsJsonObject().get("weather").getAsJsonArray().get(0).getAsJsonObject().get("description").getAsString(), true)
+                            .addField(getDateFormat(data.getAsJsonArray("list").get(4).getAsJsonObject().get("dt_txt").getAsString()), data.getAsJsonArray("list").get(4).getAsJsonObject().get("main").getAsJsonObject().get("temp").getAsString() + "°F" + " " + data.getAsJsonArray("list").get(4).getAsJsonObject().get("weather").getAsJsonArray().get(0).getAsJsonObject().get("description").getAsString(), true)
+                            .addField(getDateFormat(data.getAsJsonArray("list").get(5).getAsJsonObject().get("dt_txt").getAsString()), data.getAsJsonArray("list").get(5).getAsJsonObject().get("main").getAsJsonObject().get("temp").getAsString() + "°F" + " " + data.getAsJsonArray("list").get(5).getAsJsonObject().get("weather").getAsJsonArray().get(0).getAsJsonObject().get("description").getAsString(), true)
+                            .addField(getDateFormat(data.getAsJsonArray("list").get(6).getAsJsonObject().get("dt_txt").getAsString()), data.getAsJsonArray("list").get(6).getAsJsonObject().get("main").getAsJsonObject().get("temp").getAsString() + "°F" + " " + data.getAsJsonArray("list").get(6).getAsJsonObject().get("weather").getAsJsonArray().get(0).getAsJsonObject().get("description").getAsString(), true)
+                            .addField(getDateFormat(data.getAsJsonArray("list").get(7).getAsJsonObject().get("dt_txt").getAsString()), data.getAsJsonArray("list").get(7).getAsJsonObject().get("main").getAsJsonObject().get("temp").getAsString() + "°F" + " " + data.getAsJsonArray("list").get(7).getAsJsonObject().get("weather").getAsJsonArray().get(0).getAsJsonObject().get("description").getAsString(), true)
                             .setFooter("Requested by " + user.getAsTag(), user.getEffectiveAvatarUrl())
                             .build();
 

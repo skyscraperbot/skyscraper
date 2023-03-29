@@ -29,7 +29,7 @@ public class DiscordBot {
         jdaBotBuilder.setActivity(Activity.watching("the weather"));
 
         // Set event listeners
-        jdaBotBuilder.addEventListeners(new MessageListener(), new ReadyListener(), new PingPong(), new WeatherCommand(), new ForecastCommand());
+        jdaBotBuilder.addEventListeners(new MessageListener(), new ReadyListener(), new PingPong(), new WeatherCommand(), new ForecastCommand(), new AirQualityCommand());
 
         try {
             // create the instance of JDA
@@ -42,6 +42,8 @@ public class DiscordBot {
             CommandListUpdateAction commands = discordBot.updateCommands();
             commands.addCommands(new WeatherCommand().getCommandData()).queue();
             commands.addCommands(new ForecastCommand().getCommandData()).queue();
+            commands.addCommands(new AirQualityCommand().getCommandData()).queue();
+
         } catch (LoginException | InterruptedException e) {
             System.err.println("Couldn't login.");
             e.printStackTrace();

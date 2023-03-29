@@ -29,7 +29,7 @@ public class DiscordBot {
         jdaBotBuilder.setActivity(Activity.watching("the weather"));
 
         // Set event listeners
-        jdaBotBuilder.addEventListeners(new MessageListener(), new ReadyListener(), new PingPong(), new WeatherCommand(), new ForecastCommand());
+        jdaBotBuilder.addEventListeners(new MessageListener(), new ReadyListener(), new PingPong(), new WeatherCommand(), new ForecastCommand(), new AirQualityCommand());
 
         try {
             // create the instance of JDA

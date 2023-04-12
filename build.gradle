@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'application'
+    id 'com.github.johnrengelman.shadow' version '7.1.3'
 }
 
 group 'org.skyscraper'
@@ -28,3 +29,16 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+
+// Add this task to create an executable JAR file
+shadowJar {
+    manifest {
+        attributes 'Main-Class': 'org.skyscraper.DiscordBot'
+    }
+}
+
+// Add this task to create the stage task required by Heroku
+task stage(dependsOn: ['clean', 'shadowJar'])
+
+// Configure the start scripts to include the Discord bot token
+applicationDefaultJvmArgs = ["-Dbot.token=${System.getenv('DISCORD_BOT_TOKEN')}"]

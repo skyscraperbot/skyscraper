@@ -1,1 +1,1 @@
-web: java -jar build/libs/skyscraper-all.jar
+worker: ./gradlew run --args "$DISCORD_BOT_TOKEN"

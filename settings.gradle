@@ -1,5 +1,3 @@
-rootProject.name = 'Skyscraper'
-// Add this block to your build.gradle
 pluginManagement {
     repositories {
         gradlePluginPortal()
@@ -8,3 +6,5 @@ pluginManagement {
         jcenter()
     }
 }
+
+rootProject.name = 'Skyscraper'

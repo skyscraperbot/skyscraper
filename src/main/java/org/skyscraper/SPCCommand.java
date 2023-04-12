@@ -7,6 +7,20 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.components.Button;
 import net.dv8tion.jda.api.requests.restaction.interactions.UpdateInteractionAction;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 
@@ -84,6 +98,27 @@ public class SPCCommand extends ListenerAdapter {
 			);
 	}
 	
+	public String extractImageURL(String webpage) {
+        
+		try {
+			URL url = new URL("https://www.spc.noaa.gov/products/outlook/day2otlk.html");
+			InputStream stream = url.openStream();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+			
+			while (reader.readLine() != null) {
+				System.out.println(reader.readLine());
+			}
+			
+		} catch (MalformedURLException err) {
+			err.printStackTrace();
+			return "";
+		} catch (IOException err) {
+			err.printStackTrace();
+		}
+		
+        return "";
+	}
+	
 	@Override
 	public void onButtonClick(ButtonClickEvent event) {
 		
@@ -105,7 +140,7 @@ public class SPCCommand extends ListenerAdapter {
 		}else if (event.getComponentId().equals("day2otlk")) {
 			MessageEmbed newEmbed = new EmbedBuilder()
 					//Simple reference to their resource file
-					.setImage("https://www.spc.noaa.gov/products/outlook/day2otlk_1730.gif?" + Long.toString(Math.round(Math.random() * 100000))) //Append meaningless query to escape previously cached image
+					.setImage(extractImageURL("https://www.spc.noaa.gov/products/outlook/day2otlk.html") + Long.toString(Math.round(Math.random() * 100000))) //Append meaningless query to escape previously cached image
 					.build();
 			
 			rebuildMessage(event, event.editMessageEmbeds(newEmbed)).queue();

@@ -129,3 +129,6 @@ hs_err_pid*
 
 # Bin
 bin
+
+# DSStore
+.DS_Store

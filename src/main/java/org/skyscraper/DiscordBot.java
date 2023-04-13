@@ -40,9 +40,11 @@ public class DiscordBot {
 
             // Register the /weather command
             CommandListUpdateAction commands = discordBot.updateCommands();
-            commands.addCommands(new AirQualityCommand().getCommandData()).queue();
-            commands.addCommands(new WeatherCommand().getCommandData()).queue();
-            commands.addCommands(new ForecastCommand().getCommandData()).queue();
+            commands.addCommands(
+                new AirQualityCommand().getCommandData(),
+                new WeatherCommand().getCommandData(),
+                new ForecastCommand().getCommandData()
+            ).queue();
 
         } catch (LoginException | InterruptedException e) {
             System.err.println("Couldn't login.");

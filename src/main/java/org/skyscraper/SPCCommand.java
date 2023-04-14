@@ -112,8 +112,6 @@ public class SPCCommand extends ListenerAdapter {
 					break;
 				}
 			}
-
-			
 			//Build the URL
 			String attribute = pointer.attr("onclick");
 			String[] funcComponents = attribute.split("\'");
@@ -160,7 +158,6 @@ public class SPCCommand extends ListenerAdapter {
 			eventData = eventName.split("\\?");
 			eventName = eventData[0];
 		}
-		
 		if (isPrimaryMenu) {
 			// Main menu
 			return action.setActionRow(
@@ -200,7 +197,6 @@ public class SPCCommand extends ListenerAdapter {
 				);
 		}
 	}
-	
 	/////////// Secondary menu code
 	boolean validIndex(Elements elements, String checkString, int index) {
 		try {
@@ -214,7 +210,6 @@ public class SPCCommand extends ListenerAdapter {
 			return false;
 		}
 	}
-	
 	private UpdateInteractionAction focusOptions(ButtonClickEvent event, String day, String webpage, UpdateInteractionAction action) {
 		try {
 			Document document = Jsoup.connect(webpage).get();
@@ -232,12 +227,10 @@ public class SPCCommand extends ListenerAdapter {
 			resetDisplay(event);
 			err.printStackTrace();
 		}
-		
 		return action.setActionRow(
 				Button.danger("error", "Error!")
 				);
 	}
-	
 	/////// Main event handler
 	@Override
 	public void onButtonClick(ButtonClickEvent event) {
@@ -290,8 +283,6 @@ public class SPCCommand extends ListenerAdapter {
 			} else {
 				resetDisplay(event);
 			}
-			
-			
 		// Fallback for testing purposes	
 		} else {
 			resetDisplay(event);

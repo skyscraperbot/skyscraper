@@ -7,25 +7,12 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.components.Button;
 import net.dv8tion.jda.api.requests.restaction.interactions.UpdateInteractionAction;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -73,7 +60,6 @@ public class SPCCommand extends ListenerAdapter {
 		if (event.getName().equals("spc")) {
 
 			try {
-				System.out.println("Attempting Code");
 				String type = event.getOption("type").getAsString();
 				boolean isPrivate = event.getOption("private").getAsBoolean();
 				
@@ -104,23 +90,29 @@ public class SPCCommand extends ListenerAdapter {
 			);
 	}
 	
-	public String extractImageURL(String webpage) {
+	public String extractImageURL(String webpage, String day) {
 		try {
+			//Give me the HTML and it's resources
 			Document document = Jsoup.connect(webpage).get();
-			System.out.println(document.title());
 			
-			Elements images = document.select("img[src$='.gif']");
-			for (Element element : images) {
-				System.out.println(element.toString());
+			//Image is loaded based on website interaction, so get the reference to the image evoked within the interaction
+			Element pointer = null;
+			
+			Elements buttons = document.select("a[onclick],td[onclick]");
+			for (int i = 0; i < buttons.size() - 1; i++) {
+				if (buttons.get(i).attr("onclick").contains("\'otlk_")) {
+					pointer = buttons.get(i);
+					break;
+				}
 			}
+
 			
-			Element image = images.select("#main").first();
-			//Element image = document.getElementById("main");
-			//Element image = document.selectFirst("img[src$='.gif']");
-			System.out.println("absURL " + image.toString());
-			String imageURL = document.getElementById("main").attr("abs:href");
-			System.out.println("imageURL " + imageURL);
-			return imageURL;
+			//Build the URL
+			String attribute = pointer.attr("onclick");
+			String[] funcComponents = attribute.split("\'");
+			String assembledURL = "https://www.spc.noaa.gov/products/outlook/" + day + funcComponents[1] + ".gif?";
+			
+			return assembledURL;
 			
 		} catch (IOException err) {
 			err.printStackTrace();
@@ -149,15 +141,15 @@ public class SPCCommand extends ListenerAdapter {
 			rebuildMessage(event, event.editMessageEmbeds(newEmbed)).queue();
 		}else if (event.getComponentId().equals("day2otlk")) {
 			MessageEmbed newEmbed = new EmbedBuilder()
-					//Simple reference to their resource file
-					.setImage(extractImageURL("https://www.spc.noaa.gov/products/outlook/day2otlk.html") + Long.toString(Math.round(Math.random() * 100000))) //Append meaningless query to escape previously cached image
+					//Dynamic reference to resource name pointed within table
+					.setImage(extractImageURL("https://www.spc.noaa.gov/products/outlook/day2otlk.html", "day2") + Long.toString(Math.round(Math.random() * 100000))) //Append meaningless query to escape previously cached image
 					.build();
 			
 			rebuildMessage(event, event.editMessageEmbeds(newEmbed)).queue();
 		}else if (event.getComponentId().equals("day3otlk")) {
 			MessageEmbed newEmbed = new EmbedBuilder()
-					//Simple reference to their resource file
-					.setImage(extractImageURL("https://www.spc.noaa.gov/products/outlook/day3otlk.html") + Long.toString(Math.round(Math.random() * 100000))) //Append meaningless query to escape previously cached image
+					//Dynamic reference to resource name pointed within table
+					.setImage(extractImageURL("https://www.spc.noaa.gov/products/outlook/day3otlk.html", "day3") + Long.toString(Math.round(Math.random() * 100000))) //Append meaningless query to escape previously cached image
 					.build();
 			
 			rebuildMessage(event, event.editMessageEmbeds(newEmbed)).queue();

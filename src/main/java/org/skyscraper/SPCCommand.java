@@ -13,6 +13,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import java.io.IOException;
+import java.time.Instant;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -64,6 +65,7 @@ public class SPCCommand extends ListenerAdapter {
 				.setDescription("Assembled by Skyscraper, data provided by NOAA\nOfficial Page: " + refURL)
 				.setImage(extractImageURL(event, refURL, day) + Long.toString(Math.round(Math.random() * 100000))) //Append meaningless query to escape previously cached image
 				.setFooter("Click below for projected storm development.")
+				.setTimestamp(Instant.now())
 				.build();
 		
 		return newEmbed;
@@ -116,7 +118,6 @@ public class SPCCommand extends ListenerAdapter {
 			String attribute = pointer.attr("onclick");
 			String[] funcComponents = attribute.split("\'");
 			String assembledURL = "https://www.spc.noaa.gov/products/outlook/" + day + PREFIX + funcComponents[1] + SUFFIX + ".gif?";
-			System.out.println(assembledURL);
 			
 			return assembledURL;
 			
@@ -136,6 +137,7 @@ public class SPCCommand extends ListenerAdapter {
 				.setDescription("Assembled by Skyscraper, data provided by NOAA\nOfficial Page: " + descURL)
 				.setImage(refURL + Long.toString(Math.round(Math.random() * 100000))) //Append meaningless query to escape previously cached image
 				.setFooter("Click below for projected storm development.")
+				.setTimestamp(Instant.now())
 				.build();
 		
 		return newEmbed;
@@ -218,10 +220,6 @@ public class SPCCommand extends ListenerAdapter {
 			Document document = Jsoup.connect(webpage).get();
 			Elements buttons = document.select("a[onclick],td[onclick]");
 			
-			for (int i = 0; i < buttons.size(); i++) {
-				System.out.println(i + buttons.get(i).text());
-			}
-			
 			return action.setActionRow(
 					Button.secondary("goBack","<< Back"),
 					Button.success("categorical?" + webpage + "?" + day,"Categorical"),
@@ -274,7 +272,6 @@ public class SPCCommand extends ListenerAdapter {
 		
 		// Secondary Menu
 		}else if (event.getComponentId().contains("?")){ // Using '?' as a delimiter for parameters
-			System.out.println("Secondary event detected!");
 			String[] eventData = event.getComponentId().split("\\?");
 			String eventName = eventData[0];
 			String param = null;

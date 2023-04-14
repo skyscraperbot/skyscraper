@@ -18,6 +18,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 
 public class SPCCommand extends ListenerAdapter {
+	
 	private void showHelp(SlashCommandEvent event,boolean isPrivate) {
 		
 		event.reply("Arguments:\n"
@@ -30,12 +31,42 @@ public class SPCCommand extends ListenerAdapter {
 				).setEphemeral(isPrivate).queue();
 	}
 	
-	private void showOutlook(SlashCommandEvent event,boolean isPrivate) {
+	private MessageEmbed extractEmbed(String title, String descURL, String refURL) {
+		MessageEmbed newEmbed = new EmbedBuilder()
+				//Dynamic reference to resource name pointed within table
+				.setColor(0x327DA8)
+				.setTitle(title)
+				.setDescription("Assembled by Skyscraper, data provided by NOAA\nOfficial Page: " + descURL)
+				.setImage(extractImageURL("https://www.spc.noaa.gov/products/outlook/day3otlk.html", "day3") + Long.toString(Math.round(Math.random() * 100000))) //Append meaningless query to escape previously cached image
+				.build();
 		
+		return newEmbed;
+	}
+	
+	private MessageEmbed buildEmbed(String title, String descURL, String refURL) {
 		MessageEmbed newEmbed = new EmbedBuilder()
 				//Simple reference to their resource file
-				.setImage("https://www.spc.noaa.gov/products/activity_loop.gif?" + Long.toString(Math.round(Math.random() * 100000))) //Append meaningless query to escape previously cached image
+				.setColor(0x327DA8)
+				.setTitle(title)
+				.setDescription("Assembled by Skyscraper, data provided by NOAA\nOfficial Page: " + descURL)
+				.setImage(refURL + Long.toString(Math.round(Math.random() * 100000))) //Append meaningless query to escape previously cached image
 				.build();
+		
+		return newEmbed;
+	}
+	
+	private void showOutlook(SlashCommandEvent event,boolean isPrivate) {
+		String refURL = "https://www.spc.noaa.gov/products/activity_loop.gif?";
+		
+		MessageEmbed newEmbed = buildEmbed("Day 1 Convective Outlook", "https://www.spc.noaa.gov/", refURL);
+		
+//		MessageEmbed newEmbed = new EmbedBuilder()
+//				//Simple reference to their resource file
+//				.setColor(0x0099FF)
+//				.setTitle("Day 1 Convective Outlook")
+//				.setDescription("Assembled by Skyscraper, data provided by NOAA\nOfficial Page: " + URL)
+//				.setImage("https://www.spc.noaa.gov/products/activity_loop.gif?" + Long.toString(Math.round(Math.random() * 100000))) //Append meaningless query to escape previously cached image
+//				.build();
 		
 		event.replyEmbeds(newEmbed)
 			.addActionRow(
@@ -82,12 +113,49 @@ public class SPCCommand extends ListenerAdapter {
 	}
 	
 	private UpdateInteractionAction rebuildMessage(ButtonClickEvent event, UpdateInteractionAction action) {
+		String eventName = event.getComponentId();
+		if (eventName.equals("goBack") || eventName.equals("error")) {
+			return action.setActionRow(
+					Button.primary("day1otlk", "Day 1"),
+					Button.secondary("day2otlk", "Day 2"),
+					Button.secondary("day3otlk", "Day 3"),
+					Button.secondary("day48otlk", "Day 4-8")
+				);
+		}
+		
 		return action.setActionRow(
-				(event.getComponentId().equals("day1otlk") ? Button.primary("day1otlk", "Day 1") : Button.secondary("day1otlk", "Day 1")),
-				(event.getComponentId().equals("day2otlk") ? Button.primary("day2otlk", "Day 2") : Button.secondary("day2otlk", "Day 2")),
-				(event.getComponentId().equals("day3otlk") ? Button.primary("day3otlk", "Day 3") : Button.secondary("day3otlk", "Day 3")),
-				(event.getComponentId().equals("day48otlk") ? Button.primary("day48otlk", "Day 4-8") : Button.secondary("day48otlk", "Day 4-8"))
+				(eventName.equals("day1otlk") ? Button.primary("day1otlk", "Day 1") : Button.secondary("day1otlk", "Day 1")),
+				(eventName.equals("day2otlk") ? Button.primary("day2otlk", "Day 2") : Button.secondary("day2otlk", "Day 2")),
+				(eventName.equals("day3otlk") ? Button.primary("day3otlk", "Day 3") : Button.secondary("day3otlk", "Day 3")),
+				(eventName.equals("day48otlk") ? Button.primary("day48otlk", "Day 4-8") : Button.secondary("day48otlk", "Day 4-8"))
 			);
+	}
+	
+	private UpdateInteractionAction focusOptions(ButtonClickEvent event, String webpage, UpdateInteractionAction action) {
+		try {
+			Document document = Jsoup.connect(webpage).get();
+			Elements buttons = document.select("a[onclick],td[onclick]");
+			
+			for (int i = 0; i < buttons.size(); i++) {
+				System.out.println(buttons.get(i).text());
+			}
+			
+			return action.setActionRow(
+					Button.secondary("goBack","<< Back"),
+					Button.success(buttons.get(0).text().toLowerCase(),buttons.get(0).text()),
+					Button.secondary(buttons.get(1).text().toLowerCase(),buttons.get(1).text()),
+					Button.secondary(buttons.get(2).text().toLowerCase(),buttons.get(2).text()),
+					Button.secondary(buttons.get(3).text().toLowerCase(),buttons.get(3).text())
+					);
+			
+		} catch (IOException err) {
+			// TODO Auto-generated catch block
+			err.printStackTrace();
+		}
+		
+		return action.setActionRow(
+				Button.danger("error", "Error!")
+				);
 	}
 	
 	public String extractImageURL(String webpage, String day) {
@@ -97,8 +165,8 @@ public class SPCCommand extends ListenerAdapter {
 			
 			//Image is loaded based on website interaction, so get the reference to the image evoked within the interaction
 			Element pointer = null;
-			
 			Elements buttons = document.select("a[onclick],td[onclick]");
+			
 			for (int i = 0; i < buttons.size() - 1; i++) {
 				if (buttons.get(i).attr("onclick").contains("\'otlk_")) {
 					pointer = buttons.get(i);
@@ -125,40 +193,34 @@ public class SPCCommand extends ListenerAdapter {
 	public void onButtonClick(ButtonClickEvent event) {
 		
 		if (event.getComponentId().equals("day48otlk")) {
-			MessageEmbed newEmbed = new EmbedBuilder()
-					//Simple reference to their resource file
-					.setImage("https://www.spc.noaa.gov/products/exper/day4-8/day48prob.gif?" + Long.toString(Math.round(Math.random() * 100000))) //Append meaningless query to escape previously cached image
-					.build();
+			String refURL = "https://www.spc.noaa.gov/products/exper/day4-8/day48prob.gif?";
+			MessageEmbed newEmbed = buildEmbed("Day 4-8 Convective Outlook","https://www.spc.noaa.gov/products/exper/day4-8/",refURL);
 			
 			rebuildMessage(event, event.editMessageEmbeds(newEmbed)).queue();
 			
 		} else if (event.getComponentId().equals("day1otlk")){
-			MessageEmbed newEmbed = new EmbedBuilder()
-					//Simple reference to their resource file
-					.setImage("https://www.spc.noaa.gov/products/activity_loop.gif?" + Long.toString(Math.round(Math.random() * 100000))) //Append meaningless query to escape previously cached image
-					.build();
+			String refURL = "https://www.spc.noaa.gov/products/activity_loop.gif?";
+			MessageEmbed newEmbed = buildEmbed("Day 1 Convective Outlook", "https://www.spc.noaa.gov/products/outlook/day1otlk.html", refURL);
 			
 			rebuildMessage(event, event.editMessageEmbeds(newEmbed)).queue();
+			
 		}else if (event.getComponentId().equals("day2otlk")) {
-			MessageEmbed newEmbed = new EmbedBuilder()
-					//Dynamic reference to resource name pointed within table
-					.setImage(extractImageURL("https://www.spc.noaa.gov/products/outlook/day2otlk.html", "day2") + Long.toString(Math.round(Math.random() * 100000))) //Append meaningless query to escape previously cached image
-					.build();
+			String refURL = "https://www.spc.noaa.gov/products/outlook/day2otlk.html";
+			MessageEmbed newEmbed = extractEmbed("Day 2 Convective Outlook", refURL, refURL);
 			
-			rebuildMessage(event, event.editMessageEmbeds(newEmbed)).queue();
+			//rebuildMessage(event, event.editMessageEmbeds(newEmbed)).queue();
+			focusOptions(event, refURL, event.editMessageEmbeds(newEmbed)).queue();
 		}else if (event.getComponentId().equals("day3otlk")) {
-			MessageEmbed newEmbed = new EmbedBuilder()
-					//Dynamic reference to resource name pointed within table
-					.setImage(extractImageURL("https://www.spc.noaa.gov/products/outlook/day3otlk.html", "day3") + Long.toString(Math.round(Math.random() * 100000))) //Append meaningless query to escape previously cached image
-					.build();
+			String refURL = "https://www.spc.noaa.gov/products/outlook/day3otlk.html";
+			MessageEmbed newEmbed = extractEmbed("Day 3 Convective Outlook", refURL, refURL);
 			
 			rebuildMessage(event, event.editMessageEmbeds(newEmbed)).queue();
 		} else {
-			System.out.println("Testing!");
-			event.editComponents().setActionRow(
-					Button.danger("waar", "whar")
-					)
-			.queue();
+			// Copy of day1otlk for reset purposes
+			String refURL = "https://www.spc.noaa.gov/products/activity_loop.gif?";
+			MessageEmbed newEmbed = buildEmbed("Day 1 Convective Outlook", "https://www.spc.noaa.gov/", refURL);
+			
+			rebuildMessage(event, event.editMessageEmbeds(newEmbed)).queue();
 		}
 	}
 }

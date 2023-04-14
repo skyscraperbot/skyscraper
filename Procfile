@@ -1,0 +1,1 @@
+worker: ./gradlew run --args "$DISCORD_BOT_TOKEN"

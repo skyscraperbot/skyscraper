@@ -22,7 +22,7 @@ public class ForecastCommand extends ListenerAdapter {
     private final Gson gson = new Gson();
 
     public CommandData getCommandData() {
-        return new CommandData("forecast", "Get the forecast in a city").addOption(OptionType.STRING,"city","The city you want weather for");
+        return new CommandData("forecast", "Get the forecast in a city").addOption(OptionType.STRING,"city","The city you want weather for", true);
     }
 
     public String getDateFormat(String date){

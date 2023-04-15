@@ -22,7 +22,7 @@ public class WeatherCommand extends ListenerAdapter {
     private final Gson gson = new Gson();
 
     public CommandData getCommandData() {
-        return new CommandData("weather", "Get the weather in a city").addOption(OptionType.STRING,"city","The city you want weather for");
+        return new CommandData("weather", "Get the weather in a city").addOption(OptionType.STRING,"city","The city you want weather for", true);
     }
 
     @Override

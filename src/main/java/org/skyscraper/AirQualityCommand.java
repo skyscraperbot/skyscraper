@@ -14,7 +14,7 @@ public class AirQualityCommand extends ListenerAdapter {
 
     public CommandData getCommandData() {
         return new CommandData("airquality", "Get the air quality in a city")
-                .addOption(OptionType.STRING, "city", "The city you want air quality for");
+                .addOption(OptionType.STRING, "city", "The city you want air quality for", true);
     }
 
     @Override

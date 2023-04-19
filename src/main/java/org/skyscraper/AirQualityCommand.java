@@ -36,11 +36,14 @@ public class AirQualityCommand extends ListenerAdapter {
                     int aqi = main.get("aqi").getAsInt();
                     double pm25 = components.get("pm2_5").getAsDouble();
                     double pm10 = components.get("pm10").getAsDouble();
+                    
+                    String muSym = "\u00B5";
+                    String cubeSym = "\u00B3";
 
                     MessageEmbed embed = new EmbedBuilder()
                             .setTitle("Air Quality in " + city)
                             .addField("AQI", String.valueOf(aqi), true)
-                            .addField("Concentration (µg/m³)", "PM2.5: " + pm25 + "\n" + "PM10: " + pm10, true)
+                            .addField("Concentration (" + muSym + "g/m" + cubeSym + ")", "PM2.5: " + pm25 + "\n" + "PM10: " + pm10, true)
                             .build();
 
                     event.replyEmbeds(embed).queue();

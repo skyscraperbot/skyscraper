@@ -47,12 +47,13 @@ public class WeatherCommand extends ListenerAdapter {
 
                 if (response.isSuccessful()) {
                     JsonObject data = gson.fromJson(response.body().string(), JsonObject.class);
-
+                    String degSym = " \u00B0"; // let Java reference the char from unicode to avoid encoding issues
+                    
                     MessageEmbed embed = new EmbedBuilder()
                             .setColor(new Color(0x2F3136))
                             .setTitle("Weather in " + city)
-                            .addField("Temperature", data.getAsJsonObject("main").get("temp").getAsString() + "°F", true)
-                            .addField("Feels like", data.getAsJsonObject("main").get("feels_like").getAsString() + "°F", true)
+                            .addField("Temperature", data.getAsJsonObject("main").get("temp").getAsString() + degSym + "F", true)
+                            .addField("Feels like", data.getAsJsonObject("main").get("feels_like").getAsString() + degSym + "F", true)
                             .addField("Description", data.getAsJsonArray("weather").get(0).getAsJsonObject().get("description").getAsString(), true)
                             .setFooter("Requested by " + user.getAsTag(), user.getEffectiveAvatarUrl())
                             .build();

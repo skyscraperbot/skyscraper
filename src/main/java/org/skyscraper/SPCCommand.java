@@ -21,7 +21,9 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 public class SPCCommand extends ListenerAdapter {	
 	private void showOutlook(SlashCommandEvent event,boolean isPrivate) {
 		String refURL = "https://www.spc.noaa.gov/products/activity_loop.gif?";
-		MessageEmbed newEmbed = buildEmbed("Current Radar Outlook", "https://www.spc.noaa.gov/", refURL);
+		String actor = event.getMember().getEffectiveName();
+		
+		MessageEmbed newEmbed = buildEmbed(actor, "Current Radar Outlook", "https://www.spc.noaa.gov/", refURL);
 		
 		event.replyEmbeds(newEmbed)
 			.addActionRow(
@@ -36,7 +38,7 @@ public class SPCCommand extends ListenerAdapter {
 	public CommandData getCommandData() {
 		
 		return new CommandData("spc","Get data from the NOAA Storm Prediction Center")
-			.addOption(OptionType.BOOLEAN,"private","Whether or not the message should be private");
+			.addOption(OptionType.BOOLEAN,"private","Whether or not the message is private (default: true)");
 	}
 	
 	@Override
@@ -49,7 +51,8 @@ public class SPCCommand extends ListenerAdapter {
 				showOutlook(event, isPrivate);
 				
 			} catch (NullPointerException err) {
-				event.reply("Missing arguments: Please refer to /help for more information.").setEphemeral(true).queue();
+				//event.reply("Missing arguments: Please refer to /help for more information.").setEphemeral(true).queue();
+				showOutlook(event, false);
 			}
 		} else {
 			return;
@@ -64,7 +67,7 @@ public class SPCCommand extends ListenerAdapter {
 				.setTitle(title)
 				.setDescription("Assembled by Skyscraper, data provided by NOAA\nOfficial Page: " + refURL)
 				.setImage(extractImageURL(event, refURL, day) + Long.toString(Math.round(Math.random() * 100000))) //Append meaningless query to escape previously cached image
-				.setFooter("Click below for projected storm development.")
+				.setFooter("Click below for projected storm development. Last updated by " + event.getMember().getEffectiveName())
 				.setTimestamp(Instant.now())
 				.build();
 		
@@ -127,14 +130,14 @@ public class SPCCommand extends ListenerAdapter {
 	}
 	
 	// Basic embed builder
-	private MessageEmbed buildEmbed(String title, String descURL, String refURL) {
+	private MessageEmbed buildEmbed(String actor, String title, String descURL, String refURL) {
 		MessageEmbed newEmbed = new EmbedBuilder()
 				//Simple reference to their resource file
 				.setColor(0x327DA8)
 				.setTitle(title)
 				.setDescription("Assembled by Skyscraper, data provided by NOAA\nOfficial Page: " + descURL)
 				.setImage(refURL + Long.toString(Math.round(Math.random() * 100000))) //Append meaningless query to escape previously cached image
-				.setFooter("Click below for projected storm development.")
+				.setFooter("Click below for projected storm development. Last updated by " + actor)
 				.setTimestamp(Instant.now())
 				.build();
 		
@@ -143,7 +146,9 @@ public class SPCCommand extends ListenerAdapter {
 	
 	private void resetDisplay(ButtonClickEvent event) {
 		String refURL = "https://www.spc.noaa.gov/products/activity_loop.gif?";
-		MessageEmbed newEmbed = buildEmbed("Current Radar Outlook", "https://www.spc.noaa.gov/", refURL);
+		String actor = event.getMember().getEffectiveName();
+		
+		MessageEmbed newEmbed = buildEmbed(actor, "Current Radar Outlook", "https://www.spc.noaa.gov/", refURL);
 		
 		rebuildMessage(event, event.editMessageEmbeds(newEmbed)).queue(); // Refer to current (last) event type, highlight button of last selection on return to main
 	}
@@ -235,10 +240,11 @@ public class SPCCommand extends ListenerAdapter {
 	@Override
 	public void onButtonClick(ButtonClickEvent event) {
 		String eventType = event.getComponentId();
+		String actor = event.getMember().getEffectiveName();
 		
 		if (eventType.equals("day48otlk")) {
 			String refURL = "https://www.spc.noaa.gov/products/exper/day4-8/day48prob.gif?";
-			MessageEmbed newEmbed = buildEmbed("Day 4-8 Convective Outlook","https://www.spc.noaa.gov/products/exper/day4-8/",refURL);
+			MessageEmbed newEmbed = buildEmbed(actor, "Day 4-8 Convective Outlook","https://www.spc.noaa.gov/products/exper/day4-8/",refURL);
 			
 			rebuildMessage(event, event.editMessageEmbeds(newEmbed)).queue();
 			

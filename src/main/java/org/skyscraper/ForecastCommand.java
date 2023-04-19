@@ -79,9 +79,12 @@ public class ForecastCommand extends ListenerAdapter {
                     String degSym = " \u00B0"; // let Java reference the char from unicode to avoid encoding issues
                     
                     LocationConstructor locationConstructor = new LocationConstructor();
-                    String location = locationConstructor.getLocation(city, data.getAsJsonObject("coord").get("lat").getAsFloat(), data.getAsJsonObject("coord").get("lon").getAsFloat());
+                    JsonObject coords = data.getAsJsonObject("city").getAsJsonObject("coord");
                     
-                     MessageEmbed embed = new EmbedBuilder()
+                    String location = locationConstructor.getLocation(city, coords.get("lat").getAsFloat(), coords.get("lon").getAsFloat());
+                   
+                    
+                    MessageEmbed embed = new EmbedBuilder()
                             .setColor(new Color(0x2F3136))
                             .setTitle("Forecast for " + location)
                             .addField("24 hour forecast", "", true)

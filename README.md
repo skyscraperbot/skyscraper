@@ -1,5 +1,5 @@
 # Skyscraper Discord Weather Bot
-![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/skyscraperbot/skyscraper?include_prereleases)![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/skyscraperbot/skyscraper/gradle.yml)![GitHub issues](https://img.shields.io/github/issues/skyscraperbot/skyscraper)![Discord](https://img.shields.io/discord/1065429350889037845?color=%235865F2)
+![GitHub release](https://img.shields.io/github/v/release/skyscraperbot/skyscraper)![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/skyscraperbot/skyscraper/gradle.yml)![GitHub issues](https://img.shields.io/github/issues/skyscraperbot/skyscraper)![Discord](https://img.shields.io/discord/1065429350889037845?color=%235865F2)
 
 Are you ever curious about what the outside world feels like while you're inside gaming?
 Do you ever want to see into the future with a simple command?
